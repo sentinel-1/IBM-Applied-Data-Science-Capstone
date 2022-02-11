@@ -431,25 +431,37 @@ all_scores
 # In[31]:
 
 
+sns.barplot(x='Model', y='Score', data=pd.DataFrame({
+    'Model': ["Log. Reg.", "SVM", "Tree"],
+    'Score': all_scores
+}))
+plt.yticks(np.linspace(0,1,11))
+plt.title("Model accuracy for all built classification models")
+plt.show()
+
+
+# In[32]:
+
+
 from sklearn.metrics import jaccard_score
 
 [jaccard_score(Y_test, model.predict(X_test)) for model in all_models]
 
 
-# In[32]:
+# In[33]:
 
 
 best_model = all_models[all_scores.index(max(all_scores))]
 best_model
 
 
-# In[33]:
+# In[34]:
 
 
 best_model.score(X_test,Y_test)
 
 
-# In[34]:
+# In[35]:
 
 
 yhat = best_model.predict(X_test)
