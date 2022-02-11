@@ -1,5 +1,6 @@
 env_*/
 .jupyter/
+secret.py
 
 
 # macOS garbage

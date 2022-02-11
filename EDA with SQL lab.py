@@ -135,8 +135,9 @@ get_ipython().run_line_magic('load_ext', 'sql')
 # In[4]:
 
 
-# The code was removed by Watson Studio for sharing.
-# TODO @hidden_cell
+from secret import sql_user, sql_pass
+
+get_ipython().run_line_magic('sql', 'ibm_db_sa://{sql_user}:{sql_pass}@764264db-9824-4b7c-82df-40d1b13897c2.bs2io90l08kqb1od8lcg.databases.appdomain.cloud:32536/bludb?authSource=admin&replicaSet=replset&security=SSL')
 
 
 # ## Tasks
