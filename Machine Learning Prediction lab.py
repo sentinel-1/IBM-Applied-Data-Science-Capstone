@@ -184,13 +184,19 @@ X
 # In[8]:
 
 
-X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
+RANDOM_STATE = 2
+
+
+# In[9]:
+
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=RANDOM_STATE)
 
 
 # we can see we only have 18 test samples.
 # 
 
-# In[9]:
+# In[10]:
 
 
 Y_test.shape
@@ -202,7 +208,7 @@ Y_test.shape
 # Create a logistic regression object  then create a  GridSearchCV object  <code>logreg_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
 # 
 
-# In[10]:
+# In[11]:
 
 
 parameters ={'C':[0.01,0.1,1],
@@ -210,11 +216,11 @@ parameters ={'C':[0.01,0.1,1],
              'solver':['lbfgs']}
 
 
-# In[11]:
+# In[12]:
 
 
 parameters ={"C":[0.01,0.1,1],'penalty':['l2'], 'solver':['lbfgs']}# l1 lasso l2 ridge
-lr=LogisticRegression()
+lr=LogisticRegression(random_state=RANDOM_STATE)
 
 logreg_cv = GridSearchCV(lr, param_grid=parameters, cv=10)
 logreg_cv.fit(X_train,Y_train)
@@ -223,7 +229,7 @@ logreg_cv.fit(X_train,Y_train)
 # We output the <code>GridSearchCV</code> object for logistic regression. We display the best parameters using the data attribute <code>best_params\_</code> and the accuracy on the validation data using the data attribute <code>best_score\_</code>.
 # 
 
-# In[12]:
+# In[13]:
 
 
 print("tuned hpyerparameters :(best parameters) ",logreg_cv.best_params_)
@@ -236,7 +242,7 @@ print("accuracy :",logreg_cv.best_score_)
 # Calculate the accuracy on the test data using the method <code>score</code>:
 # 
 
-# In[13]:
+# In[14]:
 
 
 logreg_cv.score(X_test,Y_test)
@@ -245,7 +251,7 @@ logreg_cv.score(X_test,Y_test)
 # Lets look at the confusion matrix:
 # 
 
-# In[14]:
+# In[15]:
 
 
 yhat=logreg_cv.predict(X_test)
@@ -261,23 +267,23 @@ plot_confusion_matrix(Y_test,yhat)
 # Create a support vector machine object then  create a  <code>GridSearchCV</code> object  <code>svm_cv</code> with cv - 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
 # 
 
-# In[15]:
+# In[16]:
 
 
 parameters = {'kernel':('linear', 'rbf','poly','rbf', 'sigmoid'),
               'C': np.logspace(-3, 3, 5),
               'gamma':np.logspace(-3, 3, 5)}
-svm = SVC()
+svm = SVC(random_state=RANDOM_STATE)
 
 
-# In[16]:
+# In[17]:
 
 
 svm_cv = GridSearchCV(svm, param_grid=parameters, cv=10)
 svm_cv.fit(X_train, Y_train)
 
 
-# In[17]:
+# In[18]:
 
 
 print("tuned hpyerparameters :(best parameters) ",svm_cv.best_params_)
@@ -290,7 +296,7 @@ print("accuracy :",svm_cv.best_score_)
 # Calculate the accuracy on the test data using the method <code>score</code>:
 # 
 
-# In[18]:
+# In[19]:
 
 
 svm_cv.score(X_test,Y_test)
@@ -299,7 +305,7 @@ svm_cv.score(X_test,Y_test)
 # We can plot the confusion matrix
 # 
 
-# In[19]:
+# In[20]:
 
 
 yhat=svm_cv.predict(X_test)
@@ -312,7 +318,7 @@ plot_confusion_matrix(Y_test,yhat)
 # Create a decision tree classifier object then  create a  <code>GridSearchCV</code> object  <code>tree_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
 # 
 
-# In[20]:
+# In[21]:
 
 
 parameters = {'criterion': ['gini', 'entropy'],
@@ -322,17 +328,17 @@ parameters = {'criterion': ['gini', 'entropy'],
      'min_samples_leaf': [1, 2, 4],
      'min_samples_split': [2, 5, 10]}
 
-tree = DecisionTreeClassifier()
+tree = DecisionTreeClassifier(random_state=RANDOM_STATE)
 
 
-# In[21]:
+# In[22]:
 
 
 tree_cv = GridSearchCV(tree,parameters,cv=10)
 tree_cv.fit(X_train,Y_train)
 
 
-# In[22]:
+# In[23]:
 
 
 print("tuned hpyerparameters :(best parameters) ",tree_cv.best_params_)
@@ -345,7 +351,7 @@ print("accuracy :",tree_cv.best_score_)
 # Calculate the accuracy of tree_cv on the test data using the method <code>score</code>:
 # 
 
-# In[23]:
+# In[24]:
 
 
 tree_cv.score(X_test,Y_test)
@@ -354,7 +360,7 @@ tree_cv.score(X_test,Y_test)
 # We can plot the confusion matrix
 # 
 
-# In[24]:
+# In[25]:
 
 
 yhat = svm_cv.predict(X_test)
@@ -367,7 +373,7 @@ plot_confusion_matrix(Y_test,yhat)
 # Create a k nearest neighbors object then  create a  <code>GridSearchCV</code> object  <code>knn_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
 # 
 
-# In[25]:
+# In[26]:
 
 
 parameters = {'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -377,14 +383,14 @@ parameters = {'n_neighbors': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 KNN = KNeighborsClassifier()
 
 
-# In[26]:
+# In[27]:
 
 
 knn_cv = GridSearchCV(KNN,parameters,cv=10)
 knn_cv.fit(X_train,Y_train)
 
 
-# In[27]:
+# In[28]:
 
 
 print("tuned hpyerparameters :(best parameters) ",knn_cv.best_params_)
@@ -397,7 +403,7 @@ print("accuracy :",knn_cv.best_score_)
 # Calculate the accuracy of **knn_cv** on the test data using the method <code>score</code>:
 # 
 
-# In[28]:
+# In[29]:
 
 
 knn_cv.score(X_test,Y_test)
@@ -406,7 +412,7 @@ knn_cv.score(X_test,Y_test)
 # We can plot the confusion matrix
 # 
 
-# In[29]:
+# In[30]:
 
 
 yhat = knn_cv.predict(X_test)
@@ -419,7 +425,7 @@ plot_confusion_matrix(Y_test,yhat)
 # Find the method performs best:
 # 
 
-# In[30]:
+# In[31]:
 
 
 all_models = [logreg_cv, svm_cv, tree_cv, knn_cv]
@@ -428,7 +434,7 @@ all_scores = [model.score(X_test,Y_test) for model in all_models]
 all_scores
 
 
-# In[31]:
+# In[32]:
 
 
 sns.barplot(x='Model', y='Score', data=pd.DataFrame({
@@ -440,7 +446,7 @@ plt.title("Model accuracy for all built classification models")
 plt.show()
 
 
-# In[32]:
+# In[33]:
 
 
 from sklearn.metrics import jaccard_score
@@ -448,20 +454,20 @@ from sklearn.metrics import jaccard_score
 [jaccard_score(Y_test, model.predict(X_test)) for model in all_models]
 
 
-# In[33]:
+# In[34]:
 
 
 best_model = all_models[all_scores.index(max(all_scores))]
 best_model
 
 
-# In[34]:
+# In[35]:
 
 
 best_model.score(X_test,Y_test)
 
 
-# In[35]:
+# In[36]:
 
 
 yhat = best_model.predict(X_test)
