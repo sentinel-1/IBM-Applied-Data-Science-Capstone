@@ -135,7 +135,7 @@ X = pd.read_csv('data/IBM-DS0321EN-SkillsNetwork/datasets/dataset_part_3.csv')
 X.head(100)
 
 
-# ## TASK  1
+# ## TASK  1 (Prepare Y)
 # 
 
 # Create a NumPy array from the column <code>Class</code> in <code>data</code>, by applying the method <code>to_numpy()</code>  then
@@ -149,7 +149,7 @@ Y = data['Class'].to_numpy()
 Y
 
 
-# ## TASK  2
+# ## TASK  2 (Prepare X)
 # 
 
 # Standardize the data in <code>X</code> then reassign it to the variable  <code>X</code> using the transform provided below.
@@ -172,7 +172,7 @@ X
 # We split the data into training and testing data using the  function  <code>train_test_split</code>.   The training data is divided into validation data, a second set used for training  data; then the models are trained and hyperparameters are selected using the function <code>GridSearchCV</code>.
 # 
 
-# ## TASK  3
+# ## TASK  3 (Data split: 20% test)
 # 
 
 # Use the function train_test_split to split the data X and Y into training and test data. Set the parameter test_size to  0.2 and random_state to 2. The training data and test data should be assigned to the following labels.
@@ -196,7 +196,7 @@ X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.2)
 Y_test.shape
 
 
-# ## TASK  4
+# ## TASK  4 (Model: Logistic Regression)
 # 
 
 # Create a logistic regression object  then create a  GridSearchCV object  <code>logreg_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
@@ -230,7 +230,7 @@ print("tuned hpyerparameters :(best parameters) ",logreg_cv.best_params_)
 print("accuracy :",logreg_cv.best_score_)
 
 
-# ## TASK  5
+# ## TASK  5 (Validate: Logistic Regression)
 # 
 
 # Calculate the accuracy on the test data using the method <code>score</code>:
@@ -255,7 +255,7 @@ plot_confusion_matrix(Y_test,yhat)
 # Examining the confusion matrix, we see that logistic regression can distinguish between the different classes.  We see that the major problem is false positives.
 # 
 
-# ## TASK  6
+# ## TASK  6 (Model: SVM)
 # 
 
 # Create a support vector machine object then  create a  <code>GridSearchCV</code> object  <code>svm_cv</code> with cv - 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
@@ -284,7 +284,7 @@ print("tuned hpyerparameters :(best parameters) ",svm_cv.best_params_)
 print("accuracy :",svm_cv.best_score_)
 
 
-# ## TASK  7
+# ## TASK  7 (Validate: SVM)
 # 
 
 # Calculate the accuracy on the test data using the method <code>score</code>:
@@ -306,7 +306,7 @@ yhat=svm_cv.predict(X_test)
 plot_confusion_matrix(Y_test,yhat)
 
 
-# ## TASK  8
+# ## TASK  8 (Model: Decision Tree)
 # 
 
 # Create a decision tree classifier object then  create a  <code>GridSearchCV</code> object  <code>tree_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
@@ -339,7 +339,7 @@ print("tuned hpyerparameters :(best parameters) ",tree_cv.best_params_)
 print("accuracy :",tree_cv.best_score_)
 
 
-# ## TASK  9
+# ## TASK  9 (Validate: Decision Tree)
 # 
 
 # Calculate the accuracy of tree_cv on the test data using the method <code>score</code>:
@@ -361,7 +361,7 @@ yhat = svm_cv.predict(X_test)
 plot_confusion_matrix(Y_test,yhat)
 
 
-# ## TASK  10
+# ## TASK  10 (Model: KNN)
 # 
 
 # Create a k nearest neighbors object then  create a  <code>GridSearchCV</code> object  <code>knn_cv</code> with cv = 10.  Fit the object to find the best parameters from the dictionary <code>parameters</code>.
@@ -391,7 +391,7 @@ print("tuned hpyerparameters :(best parameters) ",knn_cv.best_params_)
 print("accuracy :",knn_cv.best_score_)
 
 
-# ## TASK  11
+# ## TASK  11 (Validate: KNN)
 # 
 
 # Calculate the accuracy of **knn_cv** on the test data using the method <code>score</code>:
@@ -413,7 +413,7 @@ yhat = knn_cv.predict(X_test)
 plot_confusion_matrix(Y_test,yhat)
 
 
-# ## TASK  12
+# ## TASK  12 (Compare all models)
 # 
 
 # Find the method performs best:
@@ -422,7 +422,7 @@ plot_confusion_matrix(Y_test,yhat)
 # In[30]:
 
 
-all_models = [logreg_cv, svm_cv, tree_cv]
+all_models = [logreg_cv, svm_cv, tree_cv, knn_cv]
 
 all_scores = [model.score(X_test,Y_test) for model in all_models]
 all_scores
@@ -432,7 +432,7 @@ all_scores
 
 
 sns.barplot(x='Model', y='Score', data=pd.DataFrame({
-    'Model': ["Log. Reg.", "SVM", "Tree"],
+    'Model': ["Log. Reg.", "SVM", "Tree", "KNN"],
     'Score': all_scores
 }))
 plt.yticks(np.linspace(0,1,11))
