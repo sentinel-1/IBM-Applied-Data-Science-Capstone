@@ -2,6 +2,8 @@ env_*/
 .jupyter/
 secret.py
 
+# Downloaded 404 page
+/404.html
 
 # macOS garbage
 .DS_Store

@@ -15,6 +15,7 @@ print(f"\nNotebook START time: {nb_st} UTC\n")
 import urllib
 import subprocess
 from pathlib import Path
+import wget
 import nbformat
 from nbconvert.preprocessors import Preprocessor
 from nbconvert import HTMLExporter
@@ -40,8 +41,44 @@ OUTPUT_FILES_DIR = "index_files"
 
 DOCS_DIR = Path.cwd() / "docs"
 
+ERROR404PAGE_FILE = Path("404.html")
+ERROR404PAGE_DOWNLOAD_URL = (
+    "https://raw.githubusercontent.com/sentinel-1/"
+    "sentinel-1.github.io/master/docs/404.html"
+)
+
 
 # In[5]:
+
+
+def get_404error_page_download_date() -> datetime:
+    return datetime.fromtimestamp(
+        ERROR404PAGE_FILE.stat().st_ctime
+    ).astimezone(timezone.utc)
+
+
+if (not ERROR404PAGE_FILE.exists()
+        or (datetime.utcnow().replace(tzinfo=timezone.utc)
+            - get_404error_page_download_date()) > timedelta(days=1)):
+    
+    if (ERROR404PAGE_FILE.exists()):
+        ERROR404PAGE_FILE.unlink()
+    print('Downloading the latest "404.html" file:')
+    ERROR404PAGE_FILE = Path(wget.download(ERROR404PAGE_DOWNLOAD_URL,
+                                           out=str(ERROR404PAGE_FILE)))
+else:
+    print('The "404.html" file has been updated lately '
+          f'({get_404error_page_download_date():%Y-%m-%d %H:%M:%S %Z}), '
+          'skipping download.')
+
+
+# In[6]:
+
+
+get_ipython().run_line_magic('cp', '404.html docs')
+
+
+# In[7]:
 
 
 def get_nb_name(nb_filename: str) -> str:
@@ -73,7 +110,7 @@ def get_git_ISO8601_Date_last_commited(nb_filename: str) -> str:
     return d
 
 
-# In[6]:
+# In[8]:
 
 
 notebooks = {
@@ -120,7 +157,7 @@ for nb_filename in notebooks:
     )
 
 
-# In[7]:
+# In[9]:
 
 
 IBM_datascience_index_template = Template("""
@@ -250,7 +287,7 @@ with open(index_html_file, "w", encoding='utf-8') as f:
 print("  - Done.")
 
 
-# In[8]:
+# In[10]:
 
 
 class ExtractOutputPreprocessorFileDir(Preprocessor):
@@ -441,7 +478,7 @@ html_exporter = HTMLExporter(extra_loaders=[dl],
                              config=c)
 
 
-# In[9]:
+# In[11]:
 
 
 for nb_filename in notebooks.keys():
@@ -520,7 +557,7 @@ for nb_filename in notebooks.keys():
     print(" ** done.\n")
 
 
-# In[10]:
+# In[12]:
 
 
 print(f"\n ** Total Elapsed time: {datetime.utcnow() - nb_st} ** \n")
